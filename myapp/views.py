@@ -15,14 +15,22 @@ def generate_student(request):
 
 
 def generate_students(request):
-    count = request.GET.get('count', 1)
+    count = request.GET.get("count", 1)
 
     try:
         count = int(count)
         if count <= 0 or count > 100:
-            return JsonResponse({'error': 'Invalid count. Count should be a positive integer up to 100.'}, status=400)
+            return JsonResponse(
+                {
+                    "error": "Invalid count. Count should be a positive integer up to 100."
+                },
+                status=400,
+            )
     except ValueError:
-        return JsonResponse({'error': 'Invalid count. Count should be a positive integer up to 100.'}, status=400)
+        return JsonResponse(
+            {"error": "Invalid count. Count should be a positive integer up to 100."},
+            status=400,
+        )
 
     fake = Faker()
     students = []
