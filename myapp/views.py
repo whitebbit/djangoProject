@@ -48,4 +48,4 @@ def generate_students(request):
 
 def teacher_list(request):
     teachers = Teacher.objects.all()
-    return render(request, 'teacher_list.html', {'teachers': teachers})
+    return render(request, "teacher_list.html", {"teachers": teachers})
