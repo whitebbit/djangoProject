@@ -1,7 +1,7 @@
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse, render
 from django.http import JsonResponse
 from faker import Faker
-from myapp.models import Student
+from myapp.models import Student, Teacher
 
 
 def generate_student(request):
@@ -44,3 +44,8 @@ def generate_students(request):
 
     Student.objects.bulk_create(students)
     return HttpResponse(f"{count} students generated and saved.")
+
+
+def teacher_list(request):
+    teachers = Teacher.objects.all()
+    return render(request, "teacher_list.html", {"teachers": teachers})
