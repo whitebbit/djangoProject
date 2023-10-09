@@ -1,7 +1,9 @@
-from django.shortcuts import HttpResponse, render
+from django.shortcuts import HttpResponse, render, redirect
 from django.http import JsonResponse
 from faker import Faker
-from myapp.models import Student, Teacher
+
+from myapp.forms import TeacherForm, GroupForm
+from myapp.models import Student, Teacher, Group
 
 
 def generate_student(request):
@@ -46,6 +48,35 @@ def generate_students(request):
     return HttpResponse(f"{count} students generated and saved.")
 
 
-def teacher_list(request):
+def create_teacher(request):
+    if request.method == 'POST':
+        form = TeacherForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/teachers/')
+    else:
+        form = TeacherForm()
+
+    return render(request, 'teacher_form.html', {'form': form})
+
+
+def list_teachers(request):
     teachers = Teacher.objects.all()
-    return render(request, "teacher_list.html", {"teachers": teachers})
+    return render(request, 'teacher_list.html', {'teachers': teachers})
+
+
+def create_group(request):
+    if request.method == 'POST':
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/groups/')
+    else:
+        form = GroupForm()
+
+    return render(request, 'group_form.html', {'form': form})
+
+
+def list_groups(request):
+    groups = Group.objects.all()
+    return render(request, 'group_list.html', {'groups': groups})

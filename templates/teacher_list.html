@@ -1,16 +1,18 @@
-<!-- teacher_list.html -->
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Список</title>
+    <meta charset="UTF-8">
+    <title>Teachers List</title>
 </head>
 <body>
-    <h1>Список</h1>
+    <h1>Teachers List</h1>
     <ul>
         {% for teacher in teachers %}
             <li>{{ teacher.first_name }} {{ teacher.last_name }}</li>
+        {% empty %}
+            <li>No teachers available.</li>
         {% endfor %}
     </ul>
+    <a href="{% url 'create_teacher' %}">Add Teacher</a>
 </body>
 </html>
