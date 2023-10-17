@@ -1,8 +1,8 @@
-from django.shortcuts import HttpResponse, render, redirect
+from django.shortcuts import HttpResponse, render, redirect, get_object_or_404
 from django.http import JsonResponse
 from faker import Faker
 
-from myapp.forms import TeacherForm, GroupForm
+from myapp.forms import TeacherForm, GroupForm, StudentForm
 from myapp.models import Student, Teacher, Group
 
 
@@ -48,35 +48,91 @@ def generate_students(request):
     return HttpResponse(f"{count} students generated and saved.")
 
 
-def create_teacher(request):
-    if request.method == 'POST':
-        form = TeacherForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/teachers/')
-    else:
-        form = TeacherForm()
-
-    return render(request, 'teacher_form.html', {'form': form})
-
-
-def list_teachers(request):
+def teacher_list(request):
     teachers = Teacher.objects.all()
-    return render(request, 'teacher_list.html', {'teachers': teachers})
+    return render(request, 'teachers/teacher_list.html', {'teachers': teachers})
 
 
-def create_group(request):
+def teacher_edit(request, teacher_id=None):
+    if teacher_id:
+        teacher = Teacher.objects.get(pk=teacher_id)
+    else:
+        teacher = None
+
     if request.method == 'POST':
-        form = GroupForm(request.POST)
+        form = TeacherForm(request.POST, instance=teacher)
         if form.is_valid():
             form.save()
-            return redirect('/groups/')
+            return redirect('teacher_list')
     else:
-        form = GroupForm()
+        form = TeacherForm(instance=teacher)
 
-    return render(request, 'group_form.html', {'form': form})
+    return render(request, 'teachers/teacher_edit.html', {'form': form, 'teacher': teacher})
 
 
-def list_groups(request):
+def teacher_delete(request, teacher_id):
+    teacher = get_object_or_404(Teacher, pk=teacher_id)
+    if request.method == 'POST':
+        teacher.delete()
+        return redirect('teacher_list')
+    return redirect('teacher_list')
+
+
+def student_list(request: object) -> object:
+    students = Student.objects.all()
+    return render(request, 'students/student_list.html', {'students': students})
+
+
+def student_edit(request, student_id=None):
+    if student_id:
+        student = Student.objects.get(pk=student_id)
+    else:
+        student = None
+
+    if request.method == 'POST':
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect('student_list')
+    else:
+        form = StudentForm(instance=student)
+
+    return render(request, 'students/student_edit.html', {'form': form, 'student': student})
+
+
+def student_delete(request, student_id):
+    student = get_object_or_404(Student, pk=student_id)
+    if request.method == 'POST':
+        student.delete()
+        return redirect('student_list')
+    return redirect('student_list')
+
+
+def group_list(request):
     groups = Group.objects.all()
-    return render(request, 'group_list.html', {'groups': groups})
+    return render(request, 'groups/group_list.html', {'groups': groups})
+
+
+def group_edit(request, group_id=None):
+    if group_id:
+        group = Group.objects.get(pk=group_id)
+    else:
+        group = None
+
+    if request.method == 'POST':
+        form = GroupForm(request.POST, instance=group)
+        if form.is_valid():
+            form.save()
+            return redirect('group_list')
+    else:
+        form = GroupForm(instance=group)
+
+    return render(request, 'groups/group_edit.html', {'form': form, 'group': group})
+
+
+def group_delete(request, group_id):
+    group = get_object_or_404(Group, pk=group_id)
+    if request.method == 'POST':
+        group.delete()
+        return redirect('group_list')
+    return redirect('group_list')

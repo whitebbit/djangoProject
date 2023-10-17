@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if group %}Редактировать группу{% else %}Создать группу{% endif %}</title>
+</head>
+<body>
+    <h1>{% if group %}Редактировать группу{% else %}Создать группу{% endif %}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Сохранить">
+
+    </form>
+    {% if group %}
+     <form method="post" action="{% url 'group_delete' group.id %}">
+        {% csrf_token %}
+        <input type="submit" value="Удалить">
+    </form>
+    {% endif %}
+    <a href="{% url 'group_list' %}">Список групп</a>
+</body>
+</html>

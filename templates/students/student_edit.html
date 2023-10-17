@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if student %}Редактировать студента{% else %}Добавить нового студента{% endif %}</title>
+</head>
+<body>
+    <h1>{% if student %}Редактировать студента{% else %}Добавить нового студента{% endif %}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Сохранить">
+
+    </form>
+    {% if student %}
+     <form method="post" action="{% url 'student_delete' student.id %}">
+        {% csrf_token %}
+        <input type="submit" value="Удалить">
+    </form>
+    {% endif %}
+    <a href="{% url 'student_list' %}">Список студентов</a>
+</body>
+</html>

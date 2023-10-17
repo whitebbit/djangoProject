@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if teacher %}Редактировать учителя{% else %}Добавить нового учителя{% endif %}</title>
+</head>
+<body>
+    <h1>{% if teacher %}Редактировать учителя{% else %}Добавить нового учителя{% endif %}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Сохранить">
+    </form>
+
+    {% if teacher %}
+     <form method="post" action="{% url 'teacher_delete' teacher.id %}">
+        {% csrf_token %}
+        <input type="submit" value="Удалить">
+    </form>
+    {% endif %}
+
+    <a href="{% url 'teacher_list' %}">Список учителей</a>
+</body>
+</html>

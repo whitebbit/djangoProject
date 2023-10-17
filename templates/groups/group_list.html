@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список групп</title>
+</head>
+<body>
+    <h1>Список групп</h1>
+    <a href="{% url 'group_add' %}">Добавить группу</a>
+    <ul>
+        {% for group in groups %}
+            <li>
+                <a href="{% url 'group_edit' group.id %}">{{ group.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
