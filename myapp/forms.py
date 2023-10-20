@@ -1,4 +1,7 @@
+import phonenumbers
 from django import forms
+from phonenumbers.phonenumberutil import NumberParseException
+
 from .models import Teacher, Group, Student
 
 
@@ -18,3 +21,12 @@ class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = '__all__'
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        try:
+            parsed_phone = phonenumbers.parse(phone, None)
+
+            return phonenumbers.format_number(parsed_phone, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+        except NumberParseException as e:
+            raise forms.ValidationError(e.args[0])
