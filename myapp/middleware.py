@@ -13,7 +13,7 @@ class LogMiddleware:
 
         log_entry = f"Path: {request.path}, Method: {request.method}, Execution Time: {execution_time} seconds\n"
 
-        with open('log.txt', 'a') as log_file:
+        with open("log.txt", "a") as log_file:
             log_file.write(log_entry)
 
         return response
