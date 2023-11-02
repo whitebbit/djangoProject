@@ -143,7 +143,7 @@ def group_delete(request, group_id):
     return redirect("group_list")
 
 
-def send_sms(request):
+def sms_view(request):
     if request.method == "POST":
         form = PhoneNumberForm(request.POST)
         if form.is_valid():

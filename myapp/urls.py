@@ -18,5 +18,5 @@ urlpatterns = [
     path("group/<int:group_id>/", views.group_edit, name="group_edit"),
     path("group/", views.group_edit, name="group_add"),
     path("group/delete/<int:group_id>/", views.group_delete, name="group_delete"),
-    path("send-sms/", views.send_sms, name="send_sms"),
+    path("send-sms/", views.sms_view, name="sms_view"),
 ]
