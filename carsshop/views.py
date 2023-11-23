@@ -20,17 +20,19 @@ def car_list(request):
             name="Name", email="mail@example.com", phone="+0000000000"
         )  # for test
 
-        order, created_order = Order.objects.get_or_create(
-            client=client, is_paid=False
-        )
+        order, created_order = Order.objects.get_or_create(client=client, is_paid=False)
         order.add_car_type_to_order(car_type, quantity)
 
-        request.session['order_id'] = order.id
+        request.session["order_id"] = order.id
         return redirect("car_list")
 
     return render(
-        request, "car_type_list.html",
-        {"dealership_cars_data": dealership_cars_data, "order_id": request.session.get('order_id', 0)}
+        request,
+        "carshop/car_type_list.html",
+        {
+            "dealership_cars_data": dealership_cars_data,
+            "order_id": request.session.get("order_id", 0),
+        },
     )
 
 
@@ -43,7 +45,7 @@ def create_car_type(request):
     else:
         form = CarTypeForm()
 
-    return render(request, "create_car_type.html", {"form": form})
+    return render(request, "carshop/create_car_type.html", {"form": form})
 
 
 def create_dealership(request):
@@ -55,7 +57,7 @@ def create_dealership(request):
     else:
         form = DealershipForm()
 
-    return render(request, "create_dealership.html", {"form": form})
+    return render(request, "carshop/create_dealership.html", {"form": form})
 
 
 def create_car(request):
@@ -67,7 +69,7 @@ def create_car(request):
     else:
         form = CarForm()
 
-    return render(request, "create_car.html", {"form": form})
+    return render(request, "carshop/create_car.html", {"form": form})
 
 
 def create_client(request):
@@ -79,22 +81,26 @@ def create_client(request):
     else:
         form = ClientForm()
 
-    return render(request, "create_client.html", {"form": form})
+    return render(request, "carshop/create_client.html", {"form": form})
 
 
 def payment(request, order_id):
     request.session.clear()
     order = get_object_or_404(Order, pk=order_id)
     order_quantities = OrderQuantity.objects.filter(order_id__exact=order_id)
-    if request.method == 'POST':
+    if request.method == "POST":
         if not order.is_paid:
             order.complete_order()
-            request.session['order_id'] = 0
-            return redirect('payment_success', order_id=order_id)
+            request.session["order_id"] = 0
+            return redirect("payment_success", order_id=order_id)
 
-    return render(request, 'payment.html', {'order': order, "order_quantities": order_quantities})
+    return render(
+        request,
+        "carshop/payment.html",
+        {"order": order, "order_quantities": order_quantities},
+    )
 
 
 def payment_success(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
-    return render(request, 'payment_success.html', {'order': order})
+    return render(request, "carshop/payment_success.html", {"order": order})

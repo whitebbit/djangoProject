@@ -154,4 +154,4 @@ def sms_view(request):
     else:
         form = PhoneNumberForm()
 
-    return render(request, "sms_form.html", {"form": form})
+    return render(request, "carshop/sms_form.html", {"form": form})
