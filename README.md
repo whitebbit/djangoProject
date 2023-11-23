@@ -1,10 +1,14 @@
-# Django с Celery для отправки SMS
+# Django Blog Caching
 
-Этот проект использует Celery для асинхронной отправки SMS через Django с использованием Twilio (или другого провайдера).
+Этот проект реализует механизм кэширования для блога в Django с целью улучшения времени загрузки страниц.
 
 ## Установка
 
 1. Склонируйте репозиторий на свой компьютер.
+    ```bash
+    git clone https://github.com/whitebbit/djangoProject.git
+    cd djangoProject
+    ```
 2. Создайте виртуальное окружение и активируйте его:
 
     ```bash
@@ -21,31 +25,28 @@
 
 ## Настройка
 
-1. Добавьте необходимые переменные окружения для конфиденциальных данных, таких как Twilio SID, токен и т. д.
+1. Применение миграций:
 
    ```bash
-    export TWILIO_ACCOUNT_SID="your_account_sid"
-    export TWILIO_AUTH_TOKEN="your_auth_token"
-    export TWILIO_NUMBER="your_number"
+    python manage.py migrate
+    ```
+2. Заполнение базы данных блогом:
+
+    ```bash
+    python manage.py populate_blog <count>
     ```
    
 ## Запуск RabbitMQ, Celery, и сервера Django
 
-1. Запустите RabbitMQ:
+1. Запустите Redis:
 
     ```bash
-    docker run -d -p 5672:5672 rabbitmq
+    docker run -p 6379:6379 redis
     ```
-
-2. Запустите Celery worker:
-
-    ```bash
-    celery -A your_project worker -l info
-    ```
-
-3. Запустите веб-сервер Django:
+2. Запустите веб-сервер Django:
 
     ```bash
     python manage.py runserver
     ```
+3. Откройте браузер и перейдите по адресу http://localhost:8000/blog/1/ (или другому id блога) для просмотра блогов.
 
